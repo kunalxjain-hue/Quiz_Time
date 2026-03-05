@@ -4,7 +4,6 @@
 <title>Important Question</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -18,7 +17,6 @@ position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-width:80%;
 }
 
 button{
@@ -28,18 +26,20 @@ font-size:18px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-transition:0.2s;
 }
 
 .yes{
 background:#ff4da6;
 color:white;
+position:relative;
+z-index:5;
 }
 
 .no{
 background:#555;
 color:white;
-position:relative;
+position:absolute;
+z-index:5;
 }
 
 .hearts{
@@ -53,46 +53,42 @@ from{transform:translateY(100vh);}
 to{transform:translateY(-10vh);}
 }
 
-.birds{
+.loveText{
 position:absolute;
-font-size:30px;
-animation:fly 12s linear infinite;
+font-size:22px;
+color:#ff0066;
+animation:flyLove 12s linear infinite;
+font-weight:bold;
 }
 
-@keyframes fly{
-from{left:-10%;}
-to{left:110%;}
+@keyframes flyLove{
+from{left:-20%;}
+to{left:120%;}
 }
-
 </style>
+
 </head>
 
 <body>
 
-<!-- SCREEN 1 -->
-
 <div id="screen1" class="container">
 <h1>Do you love me? ❤️</h1>
-<button class="yes" onclick="next1()">Yes</button>
+<button class="yes" id="yes1" onclick="next1()">Yes</button>
 <button class="no" id="no1">No</button>
 </div>
 
-<!-- SCREEN 2 -->
-
 <div id="screen2" class="container" style="display:none;">
 <h1>Are you up for fixing things? 💕</h1>
-<button class="yes" onclick="next2()">Yes</button>
+<button class="yes" id="yes2" onclick="next2()">Yes</button>
 <button class="no" id="no2">No</button>
 </div>
 
-<!-- SCREEN 3 -->
-
 <div id="screen3" class="container" style="display:none;">
 <h2>
-Thanks for clicking yes two times.  
-I knew you would click it only.  
-I really do care about you.  
-I need you as my partner for the rest of my life.  
+Thanks for clicking yes two times.
+I knew you would click it only.
+I really do care about you.
+I need you as my partner for the rest of my life.
 I love you ❤️
 </h2>
 
@@ -100,14 +96,10 @@ I love you ❤️
 <button class="no" onclick="decline()">Decline</button>
 </div>
 
-<!-- ACCEPT SCREEN -->
-
 <div id="screen4" class="container" style="display:none;">
 <h1 style="font-size:80px;">💍</h1>
 <h2>Forever starts now ❤️</h2>
 </div>
-
-<!-- DECLINE SCREEN -->
 
 <div id="screen5" class="container" style="display:none;">
 <h1>Please... 💔</h1>
@@ -121,28 +113,40 @@ Give our story another chance.
 
 <script>
 
-function moveButton(btn){
+let angle=0;
 
-let maxX = window.innerWidth - btn.offsetWidth - 40;
-let maxY = window.innerHeight - btn.offsetHeight - 40;
+function moveCircular(noBtn, yesBtn){
 
-let x = Math.random() * maxX;
-let y = Math.random() * maxY;
+let rect=yesBtn.getBoundingClientRect();
 
-btn.style.position="absolute";
-btn.style.left=x+"px";
-btn.style.top=y+"px";
+let centerX=rect.left + rect.width/2;
+let centerY=rect.top + rect.height/2;
+
+let radius=120;
+
+angle += Math.PI/4;
+
+let x=centerX + radius*Math.cos(angle);
+let y=centerY + radius*Math.sin(angle);
+
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
 
 }
 
 let no1=document.getElementById("no1");
+let yes1=document.getElementById("yes1");
+
+no1.addEventListener("mouseover",function(){
+moveCircular(no1,yes1);
+});
+
 let no2=document.getElementById("no2");
+let yes2=document.getElementById("yes2");
 
-no1.addEventListener("mouseover",function(){moveButton(no1)});
-no1.addEventListener("click",function(){moveButton(no1)});
-
-no2.addEventListener("mouseover",function(){moveButton(no2)});
-no2.addEventListener("click",function(){moveButton(no2)});
+no2.addEventListener("mouseover",function(){
+moveCircular(no2,yes2);
+});
 
 function next1(){
 document.getElementById("screen1").style.display="none";
@@ -176,8 +180,6 @@ document.getElementById("screen3").style.display="block";
 
 }
 
-/* HEARTS */
-
 for(let i=0;i<20;i++){
 
 let heart=document.createElement("div");
@@ -190,16 +192,15 @@ document.body.appendChild(heart);
 
 }
 
-/* BIRDS */
+for(let i=0;i<6;i++){
 
-for(let i=0;i<5;i++){
+let text=document.createElement("div");
+text.className="loveText";
+text.innerHTML="I Love You ❤️";
+text.style.top=Math.random()*80+"vh";
+text.style.animationDuration=(Math.random()*6+8)+"s";
 
-let bird=document.createElement("div");
-bird.className="birds";
-bird.innerHTML="🐦";
-bird.style.top=Math.random()*80+"vh";
-
-document.body.appendChild(bird);
+document.body.appendChild(text);
 
 }
 
