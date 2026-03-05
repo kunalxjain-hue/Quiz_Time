@@ -4,67 +4,72 @@
 <title>Important Question</title>
 
 <style>
+
 body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#ffd6e7;
-    overflow:hidden;
-    text-align:center;
+margin:0;
+font-family:Arial, sans-serif;
+background:#ffd6e7;
+overflow:hidden;
+text-align:center;
 }
 
 .container{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:80%;
 }
 
 button{
-    padding:15px 30px;
-    margin:10px;
-    font-size:18px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
+padding:15px 30px;
+margin:10px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+transition:0.2s;
 }
 
 .yes{
-    background:#ff4da6;
-    color:white;
+background:#ff4da6;
+color:white;
 }
 
 .no{
-    background:#555;
-    color:white;
+background:#555;
+color:white;
+position:relative;
 }
 
 .hearts{
-    position:absolute;
-    color:red;
-    font-size:24px;
-    animation:float 6s linear infinite;
+position:absolute;
+font-size:24px;
+animation:float 7s linear infinite;
 }
 
 @keyframes float{
-    from{transform:translateY(100vh);}
-    to{transform:translateY(-10vh);}
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
 }
 
 .birds{
-    position:absolute;
-    font-size:30px;
-    animation:fly 10s linear infinite;
+position:absolute;
+font-size:30px;
+animation:fly 12s linear infinite;
 }
 
 @keyframes fly{
-    from{left:-10%;}
-    to{left:110%;}
+from{left:-10%;}
+to{left:110%;}
 }
-</style>
 
+</style>
 </head>
 
 <body>
+
+<!-- SCREEN 1 -->
 
 <div id="screen1" class="container">
 <h1>Do you love me? ❤️</h1>
@@ -72,11 +77,15 @@ button{
 <button class="no" id="no1">No</button>
 </div>
 
+<!-- SCREEN 2 -->
+
 <div id="screen2" class="container" style="display:none;">
 <h1>Are you up for fixing things? 💕</h1>
 <button class="yes" onclick="next2()">Yes</button>
 <button class="no" id="no2">No</button>
 </div>
+
+<!-- SCREEN 3 -->
 
 <div id="screen3" class="container" style="display:none;">
 <h2>
@@ -91,17 +100,21 @@ I love you ❤️
 <button class="no" onclick="decline()">Decline</button>
 </div>
 
+<!-- ACCEPT SCREEN -->
+
 <div id="screen4" class="container" style="display:none;">
-<h1>💍</h1>
+<h1 style="font-size:80px;">💍</h1>
 <h2>Forever starts now ❤️</h2>
 </div>
+
+<!-- DECLINE SCREEN -->
 
 <div id="screen5" class="container" style="display:none;">
 <h1>Please... 💔</h1>
 <p>
-I know things may not be perfect right now,  
-but what we have is rare.  
-Please don’t give up on us so easily.  
+I know things may not be perfect right now,
+but what we have is rare.
+Please don’t give up on us so easily.
 Give our story another chance.
 </p>
 </div>
@@ -109,55 +122,85 @@ Give our story another chance.
 <script>
 
 function moveButton(btn){
-    btn.style.position="absolute";
-    btn.style.top=Math.random()*80+"vh";
-    btn.style.left=Math.random()*80+"vw";
+
+let maxX = window.innerWidth - btn.offsetWidth - 40;
+let maxY = window.innerHeight - btn.offsetHeight - 40;
+
+let x = Math.random() * maxX;
+let y = Math.random() * maxY;
+
+btn.style.position="absolute";
+btn.style.left=x+"px";
+btn.style.top=y+"px";
+
 }
 
-document.getElementById("no1").onmouseover=function(){
-    moveButton(this);
-}
+let no1=document.getElementById("no1");
+let no2=document.getElementById("no2");
 
-document.getElementById("no2").onmouseover=function(){
-    moveButton(this);
-}
+no1.addEventListener("mouseover",function(){moveButton(no1)});
+no1.addEventListener("click",function(){moveButton(no1)});
+
+no2.addEventListener("mouseover",function(){moveButton(no2)});
+no2.addEventListener("click",function(){moveButton(no2)});
 
 function next1(){
-    document.getElementById("screen1").style.display="none";
-    document.getElementById("screen2").style.display="block";
+document.getElementById("screen1").style.display="none";
+document.getElementById("screen2").style.display="block";
 }
 
 function next2(){
-    document.getElementById("screen2").style.display="none";
-    document.getElementById("screen3").style.display="block";
+document.getElementById("screen2").style.display="none";
+document.getElementById("screen3").style.display="block";
 }
 
 function accept(){
-    document.getElementById("screen3").style.display="none";
-    document.getElementById("screen4").style.display="block";
+document.getElementById("screen3").style.display="none";
+document.getElementById("screen4").style.display="block";
 }
 
 function decline(){
-    document.body.style.background="red";
-    document.getElementById("screen3").style.display="none";
-    document.getElementById("screen5").style.display="block";
+
+document.body.style.background="red";
+
+document.getElementById("screen3").style.display="none";
+document.getElementById("screen5").style.display="block";
+
+setTimeout(function(){
+
+document.body.style.background="#ffd6e7";
+document.getElementById("screen5").style.display="none";
+document.getElementById("screen3").style.display="block";
+
+},5000);
+
 }
+
+/* HEARTS */
 
 for(let i=0;i<20;i++){
-    let heart=document.createElement("div");
-    heart.className="hearts";
-    heart.innerHTML="❤️";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.animationDuration=(Math.random()*5+5)+"s";
-    document.body.appendChild(heart);
+
+let heart=document.createElement("div");
+heart.className="hearts";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*5+5)+"s";
+
+document.body.appendChild(heart);
+
 }
 
+/* BIRDS */
+
 for(let i=0;i<5;i++){
-    let bird=document.createElement("div");
-    bird.className="birds";
-    bird.innerHTML="🐦";
-    bird.style.top=Math.random()*80+"vh";
-    document.body.appendChild(bird);
+
+let bird=document.createElement("div");
+bird.className="birds";
+bird.innerHTML="🐦";
+bird.style.top=Math.random()*80+"vh";
+
+document.body.appendChild(bird);
+
 }
 
 </script>
