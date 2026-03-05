@@ -4,6 +4,7 @@
 <title>Important Question</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -31,21 +32,18 @@ cursor:pointer;
 .yes{
 background:#ff4da6;
 color:white;
-position:relative;
-z-index:5;
 }
 
 .no{
 background:#555;
 color:white;
-position:absolute;
-z-index:5;
+position:relative;
 }
 
 .hearts{
 position:absolute;
 font-size:24px;
-animation:float 7s linear infinite;
+animation:float 8s linear infinite;
 }
 
 @keyframes float{
@@ -53,33 +51,20 @@ from{transform:translateY(100vh);}
 to{transform:translateY(-10vh);}
 }
 
-.loveText{
-position:absolute;
-font-size:22px;
-color:#ff0066;
-animation:flyLove 12s linear infinite;
-font-weight:bold;
-}
-
-@keyframes flyLove{
-from{left:-20%;}
-to{left:120%;}
-}
 </style>
-
 </head>
 
 <body>
 
 <div id="screen1" class="container">
 <h1>Do you love me? ❤️</h1>
-<button class="yes" id="yes1" onclick="next1()">Yes</button>
+<button class="yes" onclick="next1()">Yes</button>
 <button class="no" id="no1">No</button>
 </div>
 
 <div id="screen2" class="container" style="display:none;">
 <h1>Are you up for fixing things? 💕</h1>
-<button class="yes" id="yes2" onclick="next2()">Yes</button>
+<button class="yes" onclick="next2()">Yes</button>
 <button class="no" id="no2">No</button>
 </div>
 
@@ -113,94 +98,79 @@ Give our story another chance.
 
 <script>
 
-let angle=0;
+function moveSlightly(btn){
 
-function moveCircular(noBtn, yesBtn){
+let rect = btn.getBoundingClientRect()
 
-let rect=yesBtn.getBoundingClientRect();
+let moveX = (Math.random()*120)-60
+let moveY = (Math.random()*120)-60
 
-let centerX=rect.left + rect.width/2;
-let centerY=rect.top + rect.height/2;
+let newX = rect.left + moveX
+let newY = rect.top + moveY
 
-let radius=120;
+let maxX = window.innerWidth - rect.width
+let maxY = window.innerHeight - rect.height
 
-angle += Math.PI/4;
+if(newX < 0) newX = 0
+if(newY < 0) newY = 0
+if(newX > maxX) newX = maxX
+if(newY > maxY) newY = maxY
 
-let x=centerX + radius*Math.cos(angle);
-let y=centerY + radius*Math.sin(angle);
-
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
+btn.style.position="fixed"
+btn.style.left=newX+"px"
+btn.style.top=newY+"px"
 
 }
 
-let no1=document.getElementById("no1");
-let yes1=document.getElementById("yes1");
+let no1=document.getElementById("no1")
+let no2=document.getElementById("no2")
 
-no1.addEventListener("mouseover",function(){
-moveCircular(no1,yes1);
-});
-
-let no2=document.getElementById("no2");
-let yes2=document.getElementById("yes2");
-
-no2.addEventListener("mouseover",function(){
-moveCircular(no2,yes2);
-});
+no1.addEventListener("mouseover",function(){moveSlightly(no1)})
+no2.addEventListener("mouseover",function(){moveSlightly(no2)})
 
 function next1(){
-document.getElementById("screen1").style.display="none";
-document.getElementById("screen2").style.display="block";
+document.getElementById("screen1").style.display="none"
+document.getElementById("screen2").style.display="block"
 }
 
 function next2(){
-document.getElementById("screen2").style.display="none";
-document.getElementById("screen3").style.display="block";
+document.getElementById("screen2").style.display="none"
+document.getElementById("screen3").style.display="block"
 }
 
 function accept(){
-document.getElementById("screen3").style.display="none";
-document.getElementById("screen4").style.display="block";
+document.getElementById("screen3").style.display="none"
+document.getElementById("screen4").style.display="block"
 }
 
 function decline(){
 
-document.body.style.background="red";
+document.body.style.background="red"
 
-document.getElementById("screen3").style.display="none";
-document.getElementById("screen5").style.display="block";
+document.getElementById("screen3").style.display="none"
+document.getElementById("screen5").style.display="block"
 
 setTimeout(function(){
 
-document.body.style.background="#ffd6e7";
-document.getElementById("screen5").style.display="none";
-document.getElementById("screen3").style.display="block";
+document.body.style.background="#ffd6e7"
+document.getElementById("screen5").style.display="none"
+document.getElementById("screen3").style.display="block"
 
-},5000);
+},5000)
 
 }
+
+/* floating hearts */
 
 for(let i=0;i<20;i++){
 
-let heart=document.createElement("div");
-heart.className="hearts";
-heart.innerHTML="❤️";
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=(Math.random()*5+5)+"s";
+let heart=document.createElement("div")
+heart.className="hearts"
+heart.innerHTML="❤️"
+heart.style.left=Math.random()*100+"vw"
+heart.style.animationDuration=(Math.random()*5+5)+"s"
 
-document.body.appendChild(heart);
-
-}
-
-for(let i=0;i<6;i++){
-
-let text=document.createElement("div");
-text.className="loveText";
-text.innerHTML="I Love You ❤️";
-text.style.top=Math.random()*80+"vh";
-text.style.animationDuration=(Math.random()*6+8)+"s";
-
-document.body.appendChild(text);
+document.body.appendChild(heart)
 
 }
 
